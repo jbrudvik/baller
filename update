@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+dir="$(dirname "$0")"
+
+pre="$dir/pre-update"
+if [ -f "$pre" ]; then
+  source "$pre"
+fi
+
+git -C "$(dirname "$0")" pull
+
+post="$dir/post-update"
+if [ -f "$post" ]; then
+  source "$post"
+fi
