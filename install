@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+pre="$dir/pre-install"
+if [ -f "$pre" ]; then
+  source "$pre"
+fi
+
+files="$(cat "$dir/files")"
+for f in $files
+do
+  ln -s "$dir/$f" "$HOME/$f"
+done
+
+post="$dir/post-install"
+if [ -f "$post" ]; then
+  source "$post"
+fi
