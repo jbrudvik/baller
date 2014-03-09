@@ -1,3 +1,3 @@
-# Gum
+# Gumball
 
-Gum organizes your configuration files. Use Gum to create a gumball, then it's easy to set up your configuration files on different computers and share with others.
+Gumball organizes your configuration files. Use Gumball to create a "gumball" for a configuration files. Once you have a gumball, it's to install, update, and uninstall your configuration files on all of your different computers. Share gumballs with others too!
