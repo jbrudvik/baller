@@ -1,0 +1,24 @@
+{
+  "name": "baller",
+  "version": "0.1.0",
+  "author": "Jeremy Brudvik <jeremy@brudvik.me>",
+  "description": "organizes your configuration files",
+  "dependencies": {
+    "commander": "2.x"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbrudvik/baller.git"
+  },
+  "engines": {
+    "node" : ">=0.10.26"
+  },
+  "preferGlobal": true,
+  "keywords": [
+    "config",
+    "configuration",
+    "files"
+  ],
+  "license": "MIT"
+}
