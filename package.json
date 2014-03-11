@@ -4,7 +4,8 @@
   "author": "Jeremy Brudvik <jeremy@brudvik.me>",
   "description": "organizes your configuration files",
   "dependencies": {
-    "commander": "2.x"
+    "commander": "2.x",
+    "handlebars": "*"
   },
   "preferGlobal": true,
   "bin": {
