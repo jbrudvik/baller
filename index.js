@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var program = require('commander');
+var pkg = require('./package.json');
 
 program
-  .version('0.1.0')
+  .version(pkg.version)
   .parse(process.argv);
