@@ -10,6 +10,7 @@
   "bin": {
     "baller": "lib/baller.js"
   },
+  "main": "lib/baller.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jbrudvik/baller.git"
