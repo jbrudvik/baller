@@ -2,7 +2,7 @@
   "name": "baller",
   "version": "0.1.0",
   "author": "Jeremy Brudvik <jeremy@brudvik.me>",
-  "description": "organizes your configuration files",
+  "description": "Organizes your configuration files",
   "dependencies": {
     "commander": "2.x",
     "handlebars": "*"
