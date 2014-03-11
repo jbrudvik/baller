@@ -26,5 +26,8 @@
     "configuration",
     "files"
   ],
-  "license": "MIT"
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://raw.github.com/jbrudvik/baller/master/LICENSE"
+  }]
 }
