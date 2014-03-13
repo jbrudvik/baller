@@ -5,7 +5,8 @@
   "description": "Organizes your configuration files",
   "dependencies": {
     "commander": "2.x",
-    "handlebars": "*"
+    "handlebars": "*",
+    "underscore": "1.6.*"
   },
   "preferGlobal": true,
   "bin": {
