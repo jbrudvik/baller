@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
+var _ = require('underscore');
+var fs = require('fs');
+var handlebars = require('handlebars');
+var path = require('path');
 var program = require('commander');
+
 var pkg = require('../package.json');
+
 
 program
   .version(pkg.version);
@@ -10,14 +16,26 @@ program
   .command('create <name>')
   .description('Create a new, empty ball in a new directory')
   .action(function (name) {
-    console.log('creating: ' + name);
+    console.log('creating: ' + name + '\n');
+
+    var context = {
+      name: name
+    };
+
+    console.log(renderTemplate('README.md.hbs', context));
   });
 
 program
   .command('init')
   .description('Initialize current directory and files as a ball')
   .action(function () {
-    console.log('initing');
+    console.log('initing' + '\n');
+
+    var context = {
+      name: path.basename(process.cwd())
+    };
+
+    console.log(renderTemplate('README.md.hbs', context));
   });
 
 program
@@ -52,4 +70,19 @@ program.parse(process.argv);
 
 if (!program.args.length) {
   program.help();
+}
+
+
+// Render module template resource with given context and return result
+function renderTemplate(resource, context) {
+  var source = fs.readFileSync(__dirname + '/../resources/' + resource).toString();
+  var template = handlebars.compile(source);
+
+  var defaultContext = {
+    username: process.env.USER
+  };
+
+  context = _.extend(defaultContext, context);
+
+  return template(defaultContext);
 }
