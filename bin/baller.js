@@ -75,7 +75,7 @@ if (!program.args.length) {
 
 // Render module template resource with given context and return result
 function renderTemplate(resource, context) {
-  var source = fs.readFileSync(__dirname + '/../resources/' + resource).toString();
+  var source = fs.readFileSync(getResourcePath(resource)).toString();
   var template = handlebars.compile(source);
 
   var defaultContext = {
@@ -85,4 +85,9 @@ function renderTemplate(resource, context) {
   context = _.extend(defaultContext, context);
 
   return template(defaultContext);
+}
+
+// Return module resource path
+function getResourcePath(resourceName) {
+  return __dirname + '/../resources/' + resourceName;
 }
