@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var _ = require('underscore');
 var fs = require('fs');
 var handlebars = require('handlebars');
 var path = require('path');
@@ -19,7 +18,8 @@ program
     console.log('creating: ' + name + '\n');
 
     var context = {
-      name: name
+      name: name,
+      username: process.env.USER
     };
 
     console.log(renderTemplate('README.md.hbs', context));
@@ -32,7 +32,8 @@ program
     console.log('initing' + '\n');
 
     var context = {
-      name: path.basename(process.cwd())
+      name: path.basename(process.cwd()),
+      username: process.env.USER
     };
 
     console.log(renderTemplate('README.md.hbs', context));
@@ -74,20 +75,13 @@ if (!program.args.length) {
 
 
 // Render module template resource with given context and return result
-function renderTemplate(resource, context) {
-  var source = fs.readFileSync(getResourcePath(resource)).toString();
-  var template = handlebars.compile(source);
-
-  var defaultContext = {
-    username: process.env.USER
-  };
-
-  context = _.extend(defaultContext, context);
-
-  return template(defaultContext);
+function renderTemplate(template, context) {
+  var source = fs.readFileSync(getTemplatePath(template)).toString();
+  var compiledTemplate = handlebars.compile(source);
+  return compiledTemplate(context);
 }
 
-// Return module resource path
-function getResourcePath(resourceName) {
-  return __dirname + '/../resources/' + resourceName;
+// Return path for template
+function getTemplatePath(template) {
+  return __dirname + '/../templates/' + template;
 }
