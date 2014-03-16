@@ -16,13 +16,7 @@ program
   .description('Create a new, empty ball in a new directory')
   .action(function (name) {
     console.log('creating: ' + name + '\n');
-
-    var context = {
-      name: name,
-      username: process.env.USER
-    };
-
-    console.log(renderTemplate('README.md.hbs', context));
+    console.log(renderReadme(name));
   });
 
 program
@@ -30,13 +24,8 @@ program
   .description('Initialize current directory and files as a ball')
   .action(function () {
     console.log('initing' + '\n');
-
-    var context = {
-      name: path.basename(process.cwd()),
-      username: process.env.USER
-    };
-
-    console.log(renderTemplate('README.md.hbs', context));
+    var name = path.basename(process.cwd());
+    console.log(renderReadme(name));
   });
 
 program
@@ -74,7 +63,7 @@ if (!program.args.length) {
 }
 
 
-// Render module template resource with given context and return result
+// Render template resource with given context and return result
 function renderTemplate(template, context) {
   var source = fs.readFileSync(getTemplatePath(template)).toString();
   var compiledTemplate = handlebars.compile(source);
@@ -84,4 +73,13 @@ function renderTemplate(template, context) {
 // Return path for template
 function getTemplatePath(template) {
   return __dirname + '/../templates/' + template;
+}
+
+// Render README for current user with given ball name and return result
+function renderReadme(name) {
+  var context = {
+    name: name,
+    username: process.env.USER
+  };
+  return renderTemplate('README.md.hbs', context);
 }
