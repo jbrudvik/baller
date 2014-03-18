@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+seconds_since_epoch=$(date +%s)
+
+files="$(cat "${dir}/files")"
+for f in ${files}; do
+  if [ -f "${HOME}/${f}" ]; then
+    # Only back up file if not equivalent to install file
+    if [ "$(stat -f "%Y" "${HOME}/${f}")" != "${dir}/${f}" ]; then
+      backup="${HOME}/${f}.${seconds_since_epoch}.bak"
+      i=1
+      while [ -f "${backup}" ]; do
+        backup="${HOME}/${f}.${seconds_since_epoch}.${i}.bak"
+        ((i++))
+      done
+      mv "${HOME}/${f}" "${backup}" && echo "Backed up ${HOME}/${f} (to ${backup})"
+    fi
+  fi
+done

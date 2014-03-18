@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+files="$(cat "${dir}/files")"
+
+shopt -s nullglob
+
+for f in ${files}; do
+  for backup_file in "${HOME}/${f}".*.bak; do
+    rm "${backup_file}" && echo "Removed ${backup_file}"
+  done
+done
+
+shopt -u nullglob

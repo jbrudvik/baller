@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+files="$(cat "${dir}/files")"
+for f in ${files}; do
+  if [ -e "${HOME}/${f}" ]; then
+    rm "${HOME}/${f}" && echo "Removed ${HOME}/${f}"
+  fi
+done
+
+restore="${dir}/restore"
+source "${restore}"

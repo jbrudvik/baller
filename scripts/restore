@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+files="$(cat "${dir}/files")"
+
+shopt -s nullglob
+
+for f in ${files}; do
+
+  # Find latest backup
+  latest_backup_file=
+
+  for backup_file in "${HOME}/${f}".*.bak; do
+
+    # Parse backup filename into timestamp and version (if it exists)
+    backup_postfix="${backup_file#${HOME}/${f}.}"
+    backup_id=${backup_postfix%.bak}
+    backup_timestamp=${backup_id%.*}
+    backup_version=
+    if [[ ${backup_id} == *.* ]]; then
+      backup_version=${backup_id#*.}
+    fi
+
+    # Parse latest backup filename into timestamp and version (if it exists)
+    latest_backup_postfix="${latest_backup_file#${HOME}/${f}.}"
+    latest_backup_id=${latest_backup_postfix%.bak}
+    latest_backup_timestamp=${latest_backup_id%.*}
+    latest_backup_version=
+    if [[ ${latest_backup_id} == *.* ]]; then
+      latest_backup_version=${latest_backup_id#*.}
+    fi
+
+    # Compare timestamps and (if timestamps equal) versions and replace
+    # latest with current backup if current backup is newer
+    if [ -z "${latest_backup_file}" ]; then
+      latest_backup_file="${backup_file}"
+    elif [ "${backup_timestamp}" -gt "${latest_backup_timestamp}" ]; then
+      latest_backup_file="${backup_file}"
+    elif [ "${backup_timestamp}" -eq "${latest_backup_timestamp}" ]; then
+      if [ -z "${latest_backup_version}" ]; then
+        latest_backup_file="${backup_file}"
+      elif [ -n "${backup_version}" ]; then
+        if [ "${backup_version}" -gt "${latest_backup_version}" ]; then
+          latest_backup_file="${backup_file}"
+        fi
+      fi
+    fi
+  done
+
+  # Restore from latest backup (if found)
+  if [ -n "${latest_backup_file}" ]; then
+    mv "${latest_backup_file}" "${HOME}/${f}" && echo "Restored ${HOME}/${f} (from ${latest_backup_file})"
+  fi
+done
+
+shopt -u nullglob
