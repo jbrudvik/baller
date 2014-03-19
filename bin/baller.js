@@ -32,8 +32,10 @@ program
     // Copy `files` file over to directory
     try {
       var filesName = 'files';
-      fs.createReadStream(getResourcePath(filesName))
-        .pipe(fs.createWriteStream(path.join(name, filesName)));
+      var originalPath = getResourcePath(filesName);
+      var copyPath = path.join(name, filesName);
+      var content = fs.readFileSync(originalPath);
+      fs.writeFileSync(copyPath, content);
     } catch (e) {
       errorMessage += ': `files` creation failed';
       console.log(errorMessage);
