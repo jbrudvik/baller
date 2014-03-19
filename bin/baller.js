@@ -29,19 +29,6 @@ program
       process.exit(1);
     }
 
-    // Copy `files` file over to directory
-    try {
-      var filesName = 'files';
-      var originalPath = getResourcePath(filesName);
-      var copyPath = path.join(name, filesName);
-      var content = fs.readFileSync(originalPath);
-      fs.writeFileSync(copyPath, content);
-    } catch (e) {
-      errorMessage += ': `files` creation failed';
-      console.log(errorMessage);
-      process.exit(1);
-    }
-
     // Write rendered template to directory (as README.md)
     try {
       var readmePath = path.join(name, 'README.md');
@@ -76,9 +63,54 @@ program
   .command('init')
   .description('Initialize current directory and files as a ball')
   .action(function () {
-    console.log('initing' + '\n');
-    var name = path.basename(process.cwd());
-    console.log(renderReadme(name));
+    var errorMessage = 'Could not initialize ball';
+
+    // Copy `files` file over to directory, prepending list of existing files
+    try {
+      var files = fs.readdirSync('.');
+      var filesName = 'files';
+      var originalPath = getResourcePath(filesName);
+      var copyPath = filesName;
+      var content = _.map(files, function (file) {
+        return file + '\n';
+      }).join('');
+      content += fs.readFileSync(originalPath);
+      fs.writeFileSync(copyPath, content);
+    } catch (e) {
+      errorMessage += ': `files` creation failed';
+      console.log(errorMessage);
+      process.exit(1);
+    }
+
+    // Write rendered template to directory (as README.md)
+    try {
+      var name = path.basename(process.cwd());
+      var readmePath = 'README.md';
+      var readme = renderReadme(name);
+      fs.writeFileSync(readmePath, readme);
+    } catch (e) {
+      errorMessage += ': README creation failed';
+      console.log(errorMessage);
+      process.exit(1);
+    }
+
+    // Copy scripts to directory
+    try {
+      var scripts = fs.readdirSync(getScriptPath());
+      _.each(scripts, function (script) {
+        var originalPath = getScriptPath(script);
+        var copyPath = script;
+        var content = fs.readFileSync(originalPath);
+        fs.writeFileSync(copyPath, content);
+        fs.chmodSync(copyPath, 0755);
+      });
+    } catch (e) {
+      errorMessage += ': scripts creation failed';
+      console.log(errorMessage);
+      process.exit(1);
+    }
+
+    console.log('Initialized "' + name + '" ball');
   });
 
 program
