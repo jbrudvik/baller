@@ -55,11 +55,11 @@ program
     try {
       var scripts = fs.readdirSync(getScriptPath());
       _.each(scripts, function (script) {
-        var original = getScriptPath(script);
-        var copy = path.join(name, script);
-        fs.createReadStream(original)
-          .pipe(fs.createWriteStream(copy));
-        fs.chmodSync(copy, 0755);
+        var originalPath = getScriptPath(script);
+        var copyPath = path.join(name, script);
+        var content = fs.readFileSync(originalPath);
+        fs.writeFileSync(copyPath, content);
+        fs.chmodSync(copyPath, 0755);
       });
     } catch (e) {
       errorMessage += ': scripts creation failed';
