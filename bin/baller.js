@@ -29,6 +29,16 @@ program
       process.exit(1);
     }
 
+    // Add baller metadata
+    try {
+      fs.mkdirSync(path.join(name, '.baller'));
+      fs.writeFileSync(path.join(name, '.baller', 'version'), pkg.version);
+    } catch (e) {
+      errorMessage += ': metadata creation failed';
+      console.log(errorMessage);
+      process.exit(1);
+    }
+
     // Write rendered template to directory (as README.md)
     try {
       var readmePath = path.join(name, 'README.md');
@@ -64,6 +74,24 @@ program
   .description('Initialize current directory and files as a ball')
   .action(function () {
     var errorMessage = 'Could not initialize ball';
+    var name = path.basename(process.cwd());
+
+    // Abort init if already a ball, otherwise add baller metadata
+    try {
+      var isBall = fs.existsSync('.baller');
+      if (isBall) {
+        errorMessage += ': directory is already a ball';
+        console.log(errorMessage);
+        process.exit(1);
+      } else {
+        fs.mkdirSync('.baller');
+        fs.writeFileSync(path.join('.baller', 'version'), pkg.version);
+      }
+    } catch (e) {
+      errorMessage += ': metadata creation failed';
+      console.log(errorMessage);
+      process.exit(1);
+    }
 
     // Copy `files` file over to directory, prepending list of existing files
     try {
@@ -84,7 +112,6 @@ program
 
     // Write rendered template to directory (as README.md)
     try {
-      var name = path.basename(process.cwd());
       var readmePath = 'README.md';
       var readme = renderReadme(name);
       fs.writeFileSync(readmePath, readme);
