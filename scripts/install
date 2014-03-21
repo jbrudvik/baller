@@ -12,7 +12,8 @@ fi
 
 files="$(cat "${dir}/files")"
 for f in ${files}; do
-  ln -sf "${dir}/${f}" "${HOME}/${f}" && echo "Installed ${HOME}/${f}"
+  installed_file="${HOME}/${f}"
+  ln -sf "${dir}/${f}" "${installed_file}" && echo "Installed ${installed_file}"
 done
 
 post="${dir}/post-install"
