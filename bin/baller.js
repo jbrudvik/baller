@@ -29,6 +29,19 @@ program
       process.exit(1);
     }
 
+    // Copy `files` file over to directory, prepending list of existing files
+    try {
+      var filesName = 'files';
+      var originalPath = getResourcePath(filesName);
+      var copyPath = path.join(name, filesName);
+      var content = fs.readFileSync(originalPath);
+      fs.writeFileSync(copyPath, content);
+    } catch (e) {
+      errorMessage += ': `files` creation failed';
+      console.error(errorMessage);
+      process.exit(1);
+    }
+
     // Add baller metadata
     try {
       fs.mkdirSync(path.join(name, '.baller'));
@@ -76,23 +89,6 @@ program
     var errorMessage = 'Could not initialize ball';
     var name = path.basename(process.cwd());
 
-    // Abort init if already a ball, otherwise add baller metadata
-    try {
-      var isBall = fs.existsSync('.baller');
-      if (isBall) {
-        errorMessage += ': directory is already a ball';
-        console.error(errorMessage);
-        process.exit(1);
-      } else {
-        fs.mkdirSync('.baller');
-        fs.writeFileSync(path.join('.baller', 'version'), pkg.version);
-      }
-    } catch (e) {
-      errorMessage += ': metadata creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
-
     // Copy `files` file over to directory, prepending list of existing files
     try {
       var files = fs.readdirSync('.');
@@ -106,6 +102,23 @@ program
       fs.writeFileSync(copyPath, content);
     } catch (e) {
       errorMessage += ': `files` creation failed';
+      console.error(errorMessage);
+      process.exit(1);
+    }
+
+    // Abort init if already a ball, otherwise add baller metadata
+    try {
+      var isBall = fs.existsSync('.baller');
+      if (isBall) {
+        errorMessage += ': directory is already a ball';
+        console.error(errorMessage);
+        process.exit(1);
+      } else {
+        fs.mkdirSync('.baller');
+        fs.writeFileSync(path.join('.baller', 'version'), pkg.version);
+      }
+    } catch (e) {
+      errorMessage += ': metadata creation failed';
       console.error(errorMessage);
       process.exit(1);
     }
