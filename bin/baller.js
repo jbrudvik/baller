@@ -25,7 +25,7 @@ program
       if (e.errno === 47) {
         errorMessage += ': Directory "' + name + '" already exists';
       }
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -35,7 +35,7 @@ program
       fs.writeFileSync(path.join(name, '.baller', 'version'), pkg.version);
     } catch (e) {
       errorMessage += ': metadata creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -46,7 +46,7 @@ program
       fs.writeFileSync(readmePath, readme);
     } catch (e) {
       errorMessage += ': README creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -62,7 +62,7 @@ program
       });
     } catch (e) {
       errorMessage += ': scripts creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -81,7 +81,7 @@ program
       var isBall = fs.existsSync('.baller');
       if (isBall) {
         errorMessage += ': directory is already a ball';
-        console.log(errorMessage);
+        console.error(errorMessage);
         process.exit(1);
       } else {
         fs.mkdirSync('.baller');
@@ -89,7 +89,7 @@ program
       }
     } catch (e) {
       errorMessage += ': metadata creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -106,7 +106,7 @@ program
       fs.writeFileSync(copyPath, content);
     } catch (e) {
       errorMessage += ': `files` creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -117,7 +117,7 @@ program
       fs.writeFileSync(readmePath, readme);
     } catch (e) {
       errorMessage += ': README creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
@@ -133,7 +133,7 @@ program
       });
     } catch (e) {
       errorMessage += ': scripts creation failed';
-      console.log(errorMessage);
+      console.error(errorMessage);
       process.exit(1);
     }
 
