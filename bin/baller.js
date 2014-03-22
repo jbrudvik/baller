@@ -91,7 +91,9 @@ program
 
     // Copy `files` file over to directory, prepending list of existing files
     try {
-      var files = fs.readdirSync('.');
+      var files = _.reject(fs.readdirSync('.'), function (file) {
+        return ignoredFile(file);
+      });
       var filesName = 'files';
       var originalPath = getResourcePath(filesName);
       var copyPath = filesName;
@@ -227,4 +229,25 @@ function renderReadme(name) {
     username: process.env.USER
   };
   return renderTemplate('README.md.hbs', context);
+}
+
+// Return boolean indicating if the file should be ignored by Baller actions
+function ignoredFile(file) {
+  return _.contains([
+    '.baller',
+    '.git',
+    'files',
+    'LICENSE',
+    'README.md',
+    'install',
+    'uninstall',
+    'backup',
+    'post-install',
+    'post-update',
+    'pre-install',
+    'pre-update',
+    'remove-backups',
+    'restore',
+    'update'
+  ], file);
 }
