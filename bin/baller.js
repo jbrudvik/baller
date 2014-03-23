@@ -9,6 +9,9 @@ var program = require('commander');
 var pkg = require('../package.json');
 
 
+var BALLER_META_DIR = '.baller';
+
+
 program
   .version(pkg.version);
 
@@ -44,8 +47,8 @@ program
 
     // Add baller metadata
     try {
-      fs.mkdirSync(path.join(name, '.baller'));
-      fs.writeFileSync(path.join(name, '.baller', 'version'), pkg.version);
+      fs.mkdirSync(path.join(name, BALLER_META_DIR));
+      fs.writeFileSync(path.join(name, BALLER_META_DIR, 'version'), pkg.version);
     } catch (e) {
       errorMessage += ': metadata creation failed';
       console.error(errorMessage);
@@ -110,14 +113,14 @@ program
 
     // Abort init if already a ball, otherwise add baller metadata
     try {
-      var isBall = fs.existsSync('.baller');
+      var isBall = fs.existsSync(BALLER_META_DIR);
       if (isBall) {
         errorMessage += ': directory is already a ball';
         console.error(errorMessage);
         process.exit(1);
       } else {
-        fs.mkdirSync('.baller');
-        fs.writeFileSync(path.join('.baller', 'version'), pkg.version);
+        fs.mkdirSync(BALLER_META_DIR);
+        fs.writeFileSync(path.join(BALLER_META_DIR, 'version'), pkg.version);
       }
     } catch (e) {
       errorMessage += ': metadata creation failed';
@@ -233,21 +236,17 @@ function renderReadme(name) {
 
 // Return boolean indicating if the file should be ignored by Baller actions
 function ignoredFile(file) {
-  return _.contains([
-    '.baller',
+  var filesToIgnore = [
+    BALLER_META_DIR,
     '.git',
-    'files',
-    'LICENSE',
-    'README.md',
-    'install',
-    'uninstall',
-    'backup',
-    'post-install',
-    'post-update',
-    'pre-install',
-    'pre-update',
-    'remove-backups',
-    'restore',
-    'update'
-  ], file);
+    'LICENSE'
+  ].concat(
+    fs.readdirSync(getScriptPath()),
+    fs.readdirSync(getResourcePath()),
+    _.map(fs.readdirSync(getTemplatePath()), function (template) {
+      return template.slice(0, template.lastIndexOf('.'));
+    })
+  );
+
+  return _.contains(filesToIgnore, file);
 }
