@@ -28,59 +28,29 @@ program
       if (e.errno === 47) {
         errorMessage += ': Directory "' + name + '" already exists';
       }
-      console.error(errorMessage);
-      process.exit(1);
+      outputErrorAndExit(options.errorMessage);
     }
 
-    // Copy `files` file over to directory, prepending list of existing files
-    try {
-      var filesName = 'files';
-      var originalPath = getResourcePath(filesName);
-      var copyPath = path.join(name, filesName);
-      var content = fs.readFileSync(originalPath);
-      fs.writeFileSync(copyPath, content);
-    } catch (e) {
-      errorMessage += ': `files` creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    createFilesFile({
+      dir: name,
+      errorMessage: errorMessage
+    });
 
-    // Add baller metadata
-    try {
-      fs.mkdirSync(path.join(name, BALLER_META_DIR));
-      fs.writeFileSync(path.join(name, BALLER_META_DIR, 'version'), pkg.version);
-    } catch (e) {
-      errorMessage += ': metadata creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    createBallerMetadata({
+      dir: name,
+      errorMessage: errorMessage
+    });
 
-    // Write rendered template to directory (as README.md)
-    try {
-      var readmePath = path.join(name, 'README.md');
-      var readme = renderReadme(name);
-      fs.writeFileSync(readmePath, readme);
-    } catch (e) {
-      errorMessage += ': README creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    writeRenderedReadme({
+      name: name,
+      dir: name,
+      errorMessage: errorMessage
+    });
 
-    // Copy scripts to directory
-    try {
-      var scripts = fs.readdirSync(getScriptPath());
-      _.each(scripts, function (script) {
-        var originalPath = getScriptPath(script);
-        var copyPath = path.join(name, script);
-        var content = fs.readFileSync(originalPath);
-        fs.writeFileSync(copyPath, content);
-        fs.chmodSync(copyPath, 0755);
-      });
-    } catch (e) {
-      errorMessage += ': scripts creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    copyScriptsToDirectory({
+      dir: name,
+      errorMessage: errorMessage
+    });
 
     console.log('Created "' + name + '" ball');
   });
@@ -92,68 +62,22 @@ program
     var errorMessage = 'Could not initialize ball';
     var name = path.basename(process.cwd());
 
-    // Copy `files` file over to directory, prepending list of existing files
-    try {
-      var files = _.reject(fs.readdirSync('.'), function (file) {
-        return ignoredFile(file);
-      });
-      var filesName = 'files';
-      var originalPath = getResourcePath(filesName);
-      var copyPath = filesName;
-      var content = _.map(files, function (file) {
-        return file + '\n';
-      }).join('');
-      content += fs.readFileSync(originalPath);
-      fs.writeFileSync(copyPath, content);
-    } catch (e) {
-      errorMessage += ': `files` creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    createFilesFile({
+      errorMessage: errorMessage
+    });
 
-    // Abort init if already a ball, otherwise add baller metadata
-    try {
-      var isBall = fs.existsSync(BALLER_META_DIR);
-      if (isBall) {
-        errorMessage += ': directory is already a ball';
-        console.error(errorMessage);
-        process.exit(1);
-      } else {
-        fs.mkdirSync(BALLER_META_DIR);
-        fs.writeFileSync(path.join(BALLER_META_DIR, 'version'), pkg.version);
-      }
-    } catch (e) {
-      errorMessage += ': metadata creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    createBallerMetadata({
+      errorMessage: errorMessage
+    });
 
-    // Write rendered template to directory (as README.md)
-    try {
-      var readmePath = 'README.md';
-      var readme = renderReadme(name);
-      fs.writeFileSync(readmePath, readme);
-    } catch (e) {
-      errorMessage += ': README creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    writeRenderedReadme({
+      name: name,
+      errorMessage: errorMessage
+    });
 
-    // Copy scripts to directory
-    try {
-      var scripts = fs.readdirSync(getScriptPath());
-      _.each(scripts, function (script) {
-        var originalPath = getScriptPath(script);
-        var copyPath = script;
-        var content = fs.readFileSync(originalPath);
-        fs.writeFileSync(copyPath, content);
-        fs.chmodSync(copyPath, 0755);
-      });
-    } catch (e) {
-      errorMessage += ': scripts creation failed';
-      console.error(errorMessage);
-      process.exit(1);
-    }
+    copyScriptsToDirectory({
+      errorMessage: errorMessage
+    });
 
     console.log('Initialized "' + name + '" ball');
   });
@@ -193,7 +117,9 @@ if (!program.args.length) {
 }
 
 
-// Return absolute path for module-owned file
+/*
+ * Return absolute path for module-owned file
+ */
 function getModulePath(name, dir) {
   var path = __dirname + '/../' + dir;
   if (name) {
@@ -202,30 +128,39 @@ function getModulePath(name, dir) {
   return path;
 }
 
-// Return path for template
+/*
+ * Return path for template
+ */
 function getTemplatePath(template) {
   return getModulePath(template, 'templates');
 }
 
-// Return path for resource
+/*
+ * Return path for resource
+ */
 function getResourcePath(resource) {
   return getModulePath(resource, 'resources');
 }
 
-// Return path for script
+/*
+ * Return path for script
+ */
 function getScriptPath(script) {
   return getModulePath(script, 'scripts');
 }
 
-
-// Render template resource with given context and return result
+/*
+ * Render template resource with given context and return result
+ */
 function renderTemplate(template, context) {
   var source = fs.readFileSync(getTemplatePath(template)).toString();
   var compiledTemplate = handlebars.compile(source);
   return compiledTemplate(context);
 }
 
-// Render README for current user with given ball name and return result
+/*
+ * Render README for current user with given ball name and return result
+ */
 function renderReadme(name) {
   var context = {
     name: name,
@@ -234,7 +169,9 @@ function renderReadme(name) {
   return renderTemplate('README.md.hbs', context);
 }
 
-// Return boolean indicating if the file should be ignored by Baller actions
+/*
+ * Return boolean indicating if the file should be ignored by Baller actions
+ */
 function ignoredFile(file) {
   var filesToIgnore = [
     BALLER_META_DIR,
@@ -249,4 +186,114 @@ function ignoredFile(file) {
   );
 
   return _.contains(filesToIgnore, file);
+}
+
+/*
+ * Output error message and exit process
+ */
+function outputErrorAndExit(errorMessage) {
+  console.error(errorMessage);
+  process.exit(1);
+}
+
+/*
+ * Create `files` file in directory, prepending list of existing files
+ * in that directory (excluding Baller files)
+ *
+ * Options:
+ * - dir: Directory in which `files` will be created (default: '.')
+ * - errorMessage: Base error message (default: 'Error')
+ */
+function createFilesFile(options) {
+  options.dir = options.dir || '.';
+  options.errorMessage = options.errorMessage || 'Error';
+
+  try {
+    var files = _.reject(fs.readdirSync(options.dir), function (file) {
+      return ignoredFile(file);
+    });
+    var filesName = 'files';
+    var originalPath = getResourcePath(filesName);
+    var copyPath = path.join(options.dir, filesName);
+    var content = _.map(files, function (file) {
+      return file + '\n';
+    }).join('');
+    content += fs.readFileSync(originalPath);
+    fs.writeFileSync(copyPath, content);
+  } catch (e) {
+    outputErrorAndExit(options.errorMessage + ': `files` creation failed');
+  }
+}
+
+/*
+ * Add Baller metadata to directory. This turns a directory into a "ball".
+ *
+ * If directory already contains Baller metadata, creation will be aborted.
+ *
+ * Options:
+ * - dir: Directory in which metadata will be create (default: '.')
+ * - errorMessage: Base error message (default: 'Error')
+ */
+function createBallerMetadata(options) {
+  options.dir = options.dir || '.';
+  options.errorMessage = options.errorMessage || 'Error';
+
+  try {
+    var ballerMetaPath = path.join(options.dir, BALLER_META_DIR);
+    var isBall = fs.existsSync(ballerMetaPath);
+    if (isBall) {
+      outputErrorAndExit(options.errorMessage + ': directory is already a ball');
+    } else {
+      fs.mkdirSync(ballerMetaPath);
+      fs.writeFileSync(path.join(ballerMetaPath, 'version'), pkg.version);
+    }
+  } catch (e) {
+    outputErrorAndExit(options.errorMessage + ': metadata creation failed');
+  }
+}
+
+/*
+ * Write rendered README.md to directory
+ *
+ * Options:
+ * - name: Ball name that will be used in README.md (required)
+ * - dir: Directory to which files will be copied (default: '.')
+ * - errorMessage: Base error message (default: 'Error')
+ */
+function writeRenderedReadme(options) {
+  options.dir = options.dir || '.';
+  options.errorMessage = options.errorMessage || 'Error';
+
+  try {
+    var readmePath = path.join(options.dir, 'README.md');
+    var readme = renderReadme(options.name);
+    fs.writeFileSync(readmePath, readme);
+  } catch (e) {
+    outputErrorAndExit(options.errorMessage + ': README creation failed');
+  }
+}
+
+/*
+ * Copy scripts to directory
+ *
+ * Options:
+ * - dir: Directory to which files will be copied (default: '.')
+ * - errorMessage: Base error message (default: 'Error')
+ */
+function copyScriptsToDirectory(options) {
+  options.dir = options.dir || '.';
+  options.errorMessage = options.errorMessage || 'Error';
+
+  try {
+    var scripts = fs.readdirSync(getScriptPath());
+    _.each(scripts, function (script) {
+      var originalPath = getScriptPath(script);
+      var copyPath = path.join(options.dir, script);
+      var content = fs.readFileSync(originalPath);
+      fs.writeFileSync(copyPath, content);
+      fs.chmodSync(copyPath, 0755);
+    });
+  } catch (e) {
+    outputErrorAndExit(options.errorMessage + ': scripts creation failed');
+  }
 }
