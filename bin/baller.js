@@ -18,69 +18,12 @@ program
 program
   .command('create <name>')
   .description('Create a new, empty ball in a new directory')
-  .action(function (name) {
-    var errorMessage = 'Could not create ball';
-
-    // Create a new directory (fail and exist if dir exists or other failure)
-    try {
-      fs.mkdirSync(name);
-    } catch (e) {
-      if (e.errno === 47) {
-        errorMessage += ': Directory "' + name + '" already exists';
-      }
-      outputErrorAndExit(options.errorMessage);
-    }
-
-    createFilesFile({
-      dir: name,
-      errorMessage: errorMessage
-    });
-
-    createBallerMetadata({
-      dir: name,
-      errorMessage: errorMessage
-    });
-
-    writeRenderedReadme({
-      name: name,
-      dir: name,
-      errorMessage: errorMessage
-    });
-
-    copyScriptsToDirectory({
-      dir: name,
-      errorMessage: errorMessage
-    });
-
-    console.log('Created "' + name + '" ball');
-  });
+  .action(create);
 
 program
   .command('init')
   .description('Initialize current directory and files as a ball')
-  .action(function () {
-    var errorMessage = 'Could not initialize ball';
-    var name = path.basename(process.cwd());
-
-    createFilesFile({
-      errorMessage: errorMessage
-    });
-
-    createBallerMetadata({
-      errorMessage: errorMessage
-    });
-
-    writeRenderedReadme({
-      name: name,
-      errorMessage: errorMessage
-    });
-
-    copyScriptsToDirectory({
-      errorMessage: errorMessage
-    });
-
-    console.log('Initialized "' + name + '" ball');
-  });
+  .action(init);
 
 program
   .command('update')
@@ -114,6 +57,74 @@ program.parse(process.argv);
 
 if (!program.args.length) {
   program.help();
+}
+
+
+/*
+ * create action
+ */
+function create(name) {
+  var errorMessage = 'Could not create ball';
+
+  // Create a new directory (fail and exist if dir exists or other failure)
+  try {
+    fs.mkdirSync(name);
+  } catch (e) {
+    if (e.errno === 47) {
+      errorMessage += ': Directory "' + name + '" already exists';
+    }
+    outputErrorAndExit(options.errorMessage);
+  }
+
+  createFilesFile({
+    dir: name,
+    errorMessage: errorMessage
+  });
+
+  createBallerMetadata({
+    dir: name,
+    errorMessage: errorMessage
+  });
+
+  writeRenderedReadme({
+    name: name,
+    dir: name,
+    errorMessage: errorMessage
+  });
+
+  copyScriptsToDirectory({
+    dir: name,
+    errorMessage: errorMessage
+  });
+
+  console.log('Created "' + name + '" ball');
+}
+
+/*
+ * init action
+ */
+function init() {
+  var errorMessage = 'Could not initialize ball';
+  var name = path.basename(process.cwd());
+
+  createFilesFile({
+    errorMessage: errorMessage
+  });
+
+  createBallerMetadata({
+    errorMessage: errorMessage
+  });
+
+  writeRenderedReadme({
+    name: name,
+    errorMessage: errorMessage
+  });
+
+  copyScriptsToDirectory({
+    errorMessage: errorMessage
+  });
+
+  console.log('Initialized "' + name + '" ball');
 }
 
 
