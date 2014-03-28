@@ -20,7 +20,7 @@
     "url": "https://github.com/jbrudvik/baller/issues"
   },
   "engines": {
-    "node" : ">=0.10.26"
+    "node" : "0.10.x"
   },
   "keywords": [
     "config",
