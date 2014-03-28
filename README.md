@@ -2,7 +2,7 @@
 
 Baller organizes your configuration files.
 
-Use Baller to create a "ball" for a configuration files. Once you've put your configuration files in a ball, it's easy to install and update your configuration files on all of your different computers. Share with others painlessly too.
+Use Baller to create a "ball" for a configuration files. Once you've put your configuration files in a ball, it's easy to install and update your configuration files on all of your different computers. Share with others, too.
 
 
 ## Install
