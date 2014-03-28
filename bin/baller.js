@@ -29,21 +29,21 @@ program
   .command('update')
   .description('Update the current ball to latest Baller scripts')
   .action(function () {
-    console.log('updating');
+    console.log('update not yet implemented');
   });
 
 program
   .command('unball')
   .description('Remove all Baller scripts from current ball')
   .action(function () {
-    console.log('unballing');
+    console.log('unball not yet implemented');
   });
 
 program
   .command('deploy')
   .description('Deploy the current ball to GitHub (or update existing deploy)')
   .action(function () {
-    console.log('deploying');
+    console.log('deploy not yet implemented');
   });
 
 program
