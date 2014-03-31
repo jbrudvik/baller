@@ -48,6 +48,11 @@ To share your ball with others:
 This will publicly deploy your current working ball to GitHub at `https://github.com/<username>/<ball>`. If this project does not exist, it will be created. Otherwise, the project will be updated.
 
 
+## Test
+
+    $ npm test
+
+
 ## Example balls
 
 - [https://github.com/jbrudvik/bash-config](https://github.com/jbrudvik/bash-config)
