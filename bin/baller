@@ -13,27 +13,27 @@ program
 program
   .command('create <name>')
   .description('Create a new, empty ball in a new directory')
-  .action(baller.create);
+  .action(outputErrorAndExitWrapper(baller.create));
 
 program
   .command('init')
   .description('Initialize current directory and files as a ball')
-  .action(baller.init);
+  .action(outputErrorAndExitWrapper(baller.init));
 
 program
   .command('update')
   .description('Update the current ball to latest Baller scripts')
-  .action(baller.update);
+  .action(outputErrorAndExitWrapper(baller.update));
 
 program
   .command('unball')
   .description('Remove all Baller scripts from current ball')
-  .action(baller.unball);
+  .action(outputErrorAndExitWrapper(baller.unball));
 
 program
   .command('deploy')
   .description('Deploy the current ball to GitHub (or update existing deploy)')
-  .action(baller.deploy);
+  .action(outputErrorAndExitWrapper(baller.deploy));
 
 program
   .command('*')
@@ -46,4 +46,21 @@ program.parse(process.argv);
 
 if (!program.args.length) {
   program.help();
+}
+
+
+/*
+ * Takes a function and returns a new function that, when invoked, calls
+ * the given function, catches any error thrown, logs the error messsage to
+ * stderr, and exits the current process with a non-zero exit code
+ */
+function outputErrorAndExitWrapper(f) {
+  return function () {
+    try {
+      f.apply(null, arguments);
+    } catch (e) {
+      console.error(e.message);
+      process.exit(1);
+    }
+  };
 }
