@@ -1,7 +1,7 @@
 /* jshint expr:true */
+/* global describe, it */
 
-var chai = require('chai');
-var expect = chai.expect;
+var expect = require('chai').expect;
 
 var baller = require('../lib');
 
