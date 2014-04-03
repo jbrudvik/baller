@@ -13,27 +13,27 @@ program
 program
   .command('create <name>')
   .description('Create a new, empty ball in a new directory')
-  .action(outputErrorAndExitWrapper(baller.create));
+  .action(actionWrapper(baller.create));
 
 program
   .command('init')
   .description('Initialize current directory and files as a ball')
-  .action(outputErrorAndExitWrapper(baller.init));
+  .action(actionWrapper(baller.init));
 
 program
   .command('update')
   .description('Update the current ball to latest Baller scripts')
-  .action(outputErrorAndExitWrapper(baller.update));
+  .action(actionWrapper(baller.update));
 
 program
   .command('unball')
   .description('Remove all Baller scripts from current ball')
-  .action(outputErrorAndExitWrapper(baller.unball));
+  .action(actionWrapper(baller.unball));
 
 program
   .command('deploy')
   .description('Deploy the current ball to GitHub (or update existing deploy)')
-  .action(outputErrorAndExitWrapper(baller.deploy));
+  .action(actionWrapper(baller.deploy));
 
 program
   .command('*')
@@ -51,13 +51,15 @@ if (!program.args.length) {
 
 /*
  * Takes a function and returns a new function that, when invoked, calls
- * the given function, catches any error thrown, logs the error messsage to
- * stderr, and exits the current process with a non-zero exit code
+ * the given function and logs the value returned to stdout. If any error
+ * is thrown by the given function, the new function logs the error messsage
+ * to stderr and exits the current process with a non-zero exit code.
  */
-function outputErrorAndExitWrapper(f) {
+function actionWrapper(f) {
   return function () {
     try {
-      f.apply(null, arguments);
+      var message = f.apply(null, arguments);
+      console.log(message);
     } catch (e) {
       console.error(e.message);
       process.exit(1);
