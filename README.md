@@ -59,3 +59,4 @@ This will publicly deploy your current working ball to GitHub at `https://github
 ## Example balls
 
 - [https://github.com/jbrudvik/bash-config](https://github.com/jbrudvik/bash-config)
+- [https://github.com/jbrudvik/jshint-config](https://github.com/jbrudvik/jshint-config)
