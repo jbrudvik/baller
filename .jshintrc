@@ -1,6 +1,11 @@
 {
+  "indent": 2,
+  "trailing": true,
   "quotmark": "single",
   "unused": true,
   "undef": true,
-  "node": true
+  "eqeqeq": true,
+  "newcap": true,
+  "curly": true,
+  "node": true,
 }
