@@ -7,5 +7,7 @@
   "eqeqeq": true,
   "newcap": true,
   "curly": true,
+  "forin": true,
+  "nonew": true,
   "node": true,
 }
