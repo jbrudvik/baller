@@ -9,5 +9,5 @@
   "curly": true,
   "forin": true,
   "nonew": true,
-  "node": true,
+  "node": true
 }
