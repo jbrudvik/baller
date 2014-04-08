@@ -8,6 +8,7 @@ var path = require('path');
 var expect = require('chai').expect;
 
 var baller = require('../lib');
+var pkg = require('../package.json');
 
 
 describe('Baller', function () {
@@ -57,14 +58,59 @@ describe('Baller', function () {
       expect(baller.create).to.throw(/name/i);
     });
 
+    it('should fail to create ball if directory with name already exists', function () {
+      fs.mkdir(name);
+      expect(baller.create.bind(baller, name)).to.throw(/directory/i);
+    });
+
     it('should return success message on success', function () {
       expect(baller.create(name)).to.match(/create/i);
     });
 
-    it('should create new directory', function () {
-      expect(fs.existsSync(name)).to.be.false;
-      baller.create(name);
-      expect(fs.existsSync(name)).to.be.true;
+    describe('creates a new ball', function () {
+      beforeEach(function () {
+        baller.create(name);
+      });
+
+      it('in a new directory', function () {
+        expect(fs.existsSync(name)).to.be.true;
+      });
+
+      it('which includes Baller metadata', function () {
+        expect(fs.existsSync(path.join(name, '.baller'))).to.be.true;
+      });
+
+      it('which has correct Baller version metadata', function () {
+        var versionFilePath = path.join(name, '.baller', 'version');
+        var ballVersion = fs.readFileSync(versionFilePath).toString();
+        expect(ballVersion).to.equal(pkg.version);
+      });
+
+      it('which includes a README', function () {
+        expect(fs.existsSync(path.join(name, 'README.md'))).to.be.true;
+      });
+
+      it('which includes a `files` file', function () {
+        expect(fs.existsSync(path.join(name, 'files'))).to.be.true;
+      });
+
+      it('which includes all Baller scripts', function () {
+        var scripts = [
+          'backup',
+          'install',
+          'uninstall',
+          'update',
+          'pre-install',
+          'post-install',
+          'remove-backups',
+          'restore',
+          'pre-update',
+          'post-update'
+        ];
+        _.each(scripts, function (script) {
+          expect(fs.existsSync(path.join(name, script))).to.be.true;
+        });
+      });
     });
   });
 
