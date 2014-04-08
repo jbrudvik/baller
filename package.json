@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "mocha": "1.x",
-    "chai": "1.x"
+    "chai": "1.x",
+    "mock-fs": "2.x"
   },
   "engines": {
     "node" : ">= 0.10.0"
