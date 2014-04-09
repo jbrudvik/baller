@@ -6,8 +6,10 @@
   "undef": true,
   "eqeqeq": true,
   "newcap": true,
-  "curly": true,
   "forin": true,
   "nonew": true,
+  "curly": true,
+  "bitwise": true,
+  "camelcase": true,
   "node": true
 }
