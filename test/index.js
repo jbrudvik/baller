@@ -1,17 +1,19 @@
 /* jshint expr:true */
 /* global describe, it, beforeEach, afterEach */
 
-var _ = require('underscore');
-var fs = require('fs');
-var mock = require('mock-fs');
-var path = require('path');
 var expect = require('chai').expect;
+var sinon = require('sinon');
+var mockfs = require('mock-fs');
+var _ = require('underscore');
+var path = require('path');
+var fs = require('fs');
 
 var baller = require('../lib');
 var pkg = require('../package.json');
 
 
 describe('Baller', function () {
+
   // Use a mock filesystem so these tests do not write to the actual
   // filesystem. Include Baller internal files in the mock filesystem as these
   // are needed for Baller to operate.
@@ -23,11 +25,11 @@ describe('Baller', function () {
       '.DS_Store'
     ];
     var contents = getDirDeepContents(ballerPath, toIgnore);
-    mock(contents);
+    mockfs(contents);
   });
 
   // Restore original filesystem. Don't keep filesystem changes across tests.
-  afterEach(mock.restore);
+  afterEach(mockfs.restore);
 
   describe('API', function () {
     it('should include create', function () {
@@ -115,8 +117,30 @@ describe('Baller', function () {
   });
 
   describe('#init', function () {
+
+    // baller.init uses process.cwd initalize the current directory as a ball.
+    // Create a new directory and "change" the current working directory to it
+    // by stubbing process.cwd to return the path of the new directory.
+    beforeEach(function () {
+      var dir = 'foo';
+      var cwd = path.join(process.cwd(), dir);
+      fs.mkdirSync(dir);
+      sinon.stub(process, 'cwd').returns(cwd);
+    });
+
+    // "Change" back to the original working directory by restoring process.cwd
+    // to its real implementation
+    afterEach(function () {
+      process.cwd.restore();
+    });
+
     it('should return success message on success', function () {
       expect(baller.init()).to.match(/init/i);
+    });
+
+    it('should fail to initialize ball if directory is already a ball', function () {
+      baller.init();
+      expect(baller.init).to.throw(/already/i);
     });
   });
 });
