@@ -30,7 +30,7 @@ This adds a README and the Baller scripts to the current directory and also adds
 
 ## Update
 
-To update an existing ball to the latest Baller scripts:
+To update the current ball to use current versions of Baller scripts:
 
     $ baller update
 

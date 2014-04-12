@@ -22,7 +22,7 @@ program
 
 program
   .command('update')
-  .description('Update the current ball to latest Baller scripts')
+  .description('Update the current ball to use current versions of Baller scripts')
   .action(actionWrapper(baller.update));
 
 program
