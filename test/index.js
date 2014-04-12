@@ -83,7 +83,7 @@ describe('Baller', function () {
     });
 
     it('fails to create ball if directory with name already exists', function () {
-      fs.mkdir(name);
+      fs.mkdirSync(name);
       expect(baller.create.bind(baller, name)).to.throw(/directory/i);
     });
 
