@@ -154,6 +154,7 @@ describe('Baller', function () {
       expect(baller.init()).to.match(/init/i);
     });
 
+
     describe('initializes a new ball', function () {
       beforeEach(baller.init);
 
@@ -294,7 +295,31 @@ describe('Baller', function () {
       });
     });
   });
+
+
+  describe('#unball', function () {
+
+    describe('when called in a directory that is a ball', function () {
+
+      var name = 'foo';
+
+      beforeEach(function () {
+        baller.create(name);
+        var cwd = path.join(process.cwd(), name);
+        sinon.stub(process, 'cwd').returns(cwd);
+      });
+
+      afterEach(function () {
+        process.cwd.restore();
+      });
+
+      it('returns success message on success', function () {
+        expect(baller.unball()).to.match(/unball/i);
+      });
+    });
+  });
 });
+
 
 /*
  * Return an object, potentially nested, representing the contents of the
