@@ -299,9 +299,9 @@ describe('Baller', function () {
 
   describe('#unball', function () {
 
-    describe('when called in a directory that is a ball', function () {
+    var name = 'foo';
 
-      var name = 'foo';
+    describe('when called in a directory that is an empty ball', function () {
 
       beforeEach(function () {
         baller.create(name);
@@ -315,6 +315,44 @@ describe('Baller', function () {
 
       it('returns success message on success', function () {
         expect(baller.unball()).to.match(/unball/i);
+      });
+
+      it('removes all files in directory', function () {
+        baller.unball();
+        expect(fs.readdirSync('.')).to.be.empty;
+      });
+    });
+
+
+    describe('when called in a directory that is a non-empty ball', function () {
+
+      var existingFiles = [
+        'one',
+        'two',
+        'three'
+      ];
+
+      beforeEach(function () {
+        fs.mkdir(name);
+        _.each(existingFiles, function (existingFile) {
+          fs.writeFile(path.join(name, existingFile));
+        });
+        var cwd = path.join(process.cwd(), name);
+        sinon.stub(process, 'cwd').returns(cwd);
+        baller.init();
+      });
+
+      afterEach(function () {
+        process.cwd.restore();
+      });
+
+      it('returns success message on success', function () {
+        expect(baller.unball()).to.match(/unball/i);
+      });
+
+      it('removes all files in directory except original files', function () {
+        baller.unball();
+        expect(fs.readdirSync('.')).to.have.members(existingFiles);
       });
     });
   });
