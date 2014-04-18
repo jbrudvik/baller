@@ -298,7 +298,6 @@ describe('Baller', function () {
 
 
   describe('#unball', function () {
-
     var name = 'foo';
 
     describe('when called in a directory that is an empty ball', function () {
@@ -325,7 +324,6 @@ describe('Baller', function () {
 
 
     describe('when called in a directory that is a non-empty ball', function () {
-
       var existingFiles = [
         'one',
         'two',
@@ -353,6 +351,44 @@ describe('Baller', function () {
       it('removes all files in directory except original files', function () {
         baller.unball();
         expect(fs.readdirSync('.')).to.have.members(existingFiles);
+      });
+    });
+
+
+    describe('when called in a directory that is not a ball', function () {
+      var existingFiles = [
+        'one',
+        'two',
+        'three',
+        README_FILE,
+        LICENSE_FILE,
+        FILES_FILE
+      ].concat(BALLER_SCRIPTS);
+
+      beforeEach(function () {
+        fs.mkdir(name);
+        _.each(existingFiles, function (existingFile) {
+          fs.writeFile(path.join(name, existingFile));
+        });
+        var cwd = path.join(process.cwd(), name);
+        sinon.stub(process, 'cwd').returns(cwd);
+      });
+
+      afterEach(function () {
+        process.cwd.restore();
+      });
+
+      it('fails to unball', function () {
+        expect(baller.unball).to.throw(/not/i);
+      });
+
+      it('removes no files', function () {
+        try {
+          baller.unball();
+        } catch (e) {
+        } finally {
+          expect(fs.readdirSync('.')).to.have.members(existingFiles);
+        }
       });
     });
   });
