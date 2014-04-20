@@ -65,8 +65,8 @@ describe('Baller', function () {
       expect(baller.update).to.exist;
     });
 
-    it('includes unball', function () {
-      expect(baller.unball).to.exist;
+    it('includes destroy', function () {
+      expect(baller.destroy).to.exist;
     });
 
     it('includes deploy', function () {
@@ -297,7 +297,7 @@ describe('Baller', function () {
   });
 
 
-  describe('#unball', function () {
+  describe('#destroy', function () {
     var name = 'foo';
 
     describe('when called in a directory that is an empty ball', function () {
@@ -313,11 +313,11 @@ describe('Baller', function () {
       });
 
       it('returns success message on success', function () {
-        expect(baller.unball()).to.match(/unball/i);
+        expect(baller.destroy()).to.match(/destroy/i);
       });
 
       it('removes all files in directory', function () {
-        baller.unball();
+        baller.destroy();
         expect(fs.readdirSync('.')).to.be.empty;
       });
     });
@@ -345,11 +345,11 @@ describe('Baller', function () {
       });
 
       it('returns success message on success', function () {
-        expect(baller.unball()).to.match(/unball/i);
+        expect(baller.destroy()).to.match(/destroy/i);
       });
 
       it('removes all files in directory except original files', function () {
-        baller.unball();
+        baller.destroy();
         expect(fs.readdirSync('.')).to.have.members(existingFiles);
       });
     });
@@ -378,13 +378,13 @@ describe('Baller', function () {
         process.cwd.restore();
       });
 
-      it('fails to unball', function () {
-        expect(baller.unball).to.throw(/not/i);
+      it('fails to destroy', function () {
+        expect(baller.destroy).to.throw(/not/i);
       });
 
       it('removes no files', function () {
         try {
-          baller.unball();
+          baller.destroy();
         } catch (e) {
         } finally {
           expect(fs.readdirSync('.')).to.have.members(existingFiles);

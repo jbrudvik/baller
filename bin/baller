@@ -26,9 +26,9 @@ program
   .action(actionWrapper(baller.update));
 
 program
-  .command('unball')
+  .command('destroy')
   .description('Remove all Baller scripts from current ball')
-  .action(actionWrapper(baller.unball));
+  .action(actionWrapper(baller.destroy));
 
 program
   .command('deploy')

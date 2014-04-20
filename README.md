@@ -35,11 +35,11 @@ To update the current ball to use current versions of Baller scripts:
     $ baller update
 
 
-## Unball
+## Destroy
 
 To take an existing ball and remove all Baller-introduced files:
 
-    $ baller unball
+    $ baller destroy
 
 
 ## Deploy
