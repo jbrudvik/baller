@@ -203,7 +203,7 @@ describe('Baller', function () {
 
       beforeEach(function () {
         _.each(existingFiles, function (existingFile) {
-          fs.writeFile(existingFile);
+          fs.writeFileSync(existingFile);
         });
         baller.init();
       });
@@ -253,7 +253,7 @@ describe('Baller', function () {
       beforeEach(function () {
         var existingFiles = nonIgnoredFiles.concat(ignoredFiles);
         _.each(existingFiles, function (existingFile) {
-          fs.writeFile(existingFile);
+          fs.writeFileSync(existingFile);
         });
         baller.init();
       });
@@ -280,7 +280,7 @@ describe('Baller', function () {
 
       beforeEach(function () {
         _.each(existingFiles, function (existingFile) {
-          fs.writeFile(existingFile);
+          fs.writeFileSync(existingFile);
         });
         _.each(existingDirs, function (existingDir) {
           fs.mkdirSync(existingDir);
@@ -333,7 +333,7 @@ describe('Baller', function () {
       beforeEach(function () {
         fs.mkdir(name);
         _.each(existingFiles, function (existingFile) {
-          fs.writeFile(path.join(name, existingFile));
+          fs.writeFileSync(path.join(name, existingFile));
         });
         var cwd = path.join(process.cwd(), name);
         sinon.stub(process, 'cwd').returns(cwd);
@@ -368,7 +368,7 @@ describe('Baller', function () {
       beforeEach(function () {
         fs.mkdir(name);
         _.each(existingFiles, function (existingFile) {
-          fs.writeFile(path.join(name, existingFile));
+          fs.writeFileSync(path.join(name, existingFile));
         });
         var cwd = path.join(process.cwd(), name);
         sinon.stub(process, 'cwd').returns(cwd);
