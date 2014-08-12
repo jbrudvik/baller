@@ -17,7 +17,7 @@ var BALLER_META_DIR = '.baller';
 var VERSION_FILE = 'version';
 var README_FILE = 'README.md';
 var LICENSE_FILE = 'LICENSE';
-var FILES_FILE = 'files';
+var FILES_DIR = 'files';
 var BALLER_SCRIPTS = [
   'backup',
   'install',
@@ -114,8 +114,10 @@ describe('Baller', function () {
         expect(fs.existsSync(path.join(name, README_FILE))).to.be.true;
       });
 
-      it('which includes a `files` file', function () {
-        expect(fs.existsSync(path.join(name, FILES_FILE))).to.be.true;
+      it('which includes a `files` subdirectory', function () {
+        var filesDir = path.join(name, FILES_DIR);
+        expect(fs.existsSync(filesDir)).to.be.true;
+        expect(fs.statSync(filesDir).isDirectory()).to.be.true;
       });
 
       it('which includes all Baller scripts', function () {
@@ -128,6 +130,7 @@ describe('Baller', function () {
 
 
   describe('#init', function () {
+    var filesDir;
 
     // baller.init uses process.cwd initialize the current directory as a ball.
     // Create a new directory and "change" the current working directory to it
@@ -137,6 +140,7 @@ describe('Baller', function () {
       var cwd = path.join(process.cwd(), dir);
       fs.mkdirSync(dir);
       sinon.stub(process, 'cwd').returns(cwd);
+      filesDir = path.join('.', FILES_DIR);
     });
 
     // "Change" back to the original working directory by restoring process.cwd
@@ -172,8 +176,9 @@ describe('Baller', function () {
         expect(fs.existsSync(README_FILE)).to.be.true;
       });
 
-      it('which includes a `files` file', function () {
-        expect(fs.existsSync(FILES_FILE)).to.be.true;
+      it('which includes a `files` subdirectory', function () {
+        expect(fs.existsSync(filesDir)).to.be.true;
+        expect(fs.statSync(filesDir).isDirectory()).to.be.true;
       });
 
       it('which includes all Baller scripts', function () {
@@ -187,9 +192,8 @@ describe('Baller', function () {
     describe('when called in a directory containing no files', function () {
       beforeEach(baller.init);
 
-      it('initializes a ball with no entries in `files` file', function () {
-        var filesFileContents = fs.readFileSync(FILES_FILE).toString();
-        expect(filesFileContents.trim()).to.be.empty;
+      it('initializes a ball with an empty `files` subdirectory', function () {
+        expect(fs.readdirSync(filesDir)).to.be.empty;
       });
     });
 
@@ -208,10 +212,8 @@ describe('Baller', function () {
         baller.init();
       });
 
-      it('initializes a ball with entries for each existing file in `files` file', function () {
-        var filesFileContents = fs.readFileSync(FILES_FILE).toString();
-        var filesFileEntries = filesFileContents.trim().split(/\s+/);
-        expect(filesFileEntries).to.have.members(existingFiles);
+      it('initializes a ball with all existing files moved to `files` subdirectory', function () {
+        expect(fs.readdirSync(filesDir)).to.have.members(existingFiles);
       });
     });
 
@@ -230,9 +232,8 @@ describe('Baller', function () {
         baller.init();
       });
 
-      it('initializes a ball with no entries in `files` file', function () {
-        var filesFileContents = fs.readFileSync(FILES_FILE).toString();
-        expect(filesFileContents.trim()).to.be.empty;
+      it('initializes a ball with existing directories moved to `files` subdirectory', function () {
+        expect(fs.readdirSync(filesDir)).to.have.members(existingDirs);
       });
     });
 
@@ -241,13 +242,13 @@ describe('Baller', function () {
       var nonIgnoredFiles = [
         'one',
         'two',
-        'three'
+        'three',
+        FILES_DIR
       ];
 
       var ignoredFiles = [
         README_FILE,
-        LICENSE_FILE,
-        FILES_FILE
+        LICENSE_FILE
       ].concat(BALLER_SCRIPTS);
 
       beforeEach(function () {
@@ -258,10 +259,8 @@ describe('Baller', function () {
         baller.init();
       });
 
-      it('initializes a ball with entries for all non-ignored files only `files` file', function () {
-        var filesFileContents = fs.readFileSync(FILES_FILE).toString();
-        var filesFileEntries = filesFileContents.trim().split(/\s+/);
-        expect(filesFileEntries).to.have.members(nonIgnoredFiles);
+      it('initializes a ball with all non-ignored files moved to `files` subdirectory', function () {
+        expect(fs.readdirSync(filesDir)).to.have.members(nonIgnoredFiles);
       });
     });
 
@@ -270,7 +269,8 @@ describe('Baller', function () {
       var existingFiles = [
         'one',
         'two',
-        'three'
+        'three',
+        FILES_DIR
       ];
       var existingDirs = [
         'foo',
@@ -288,10 +288,35 @@ describe('Baller', function () {
         baller.init();
       });
 
-      it('initializes a ball with entries for all files only in `files` file', function () {
-        var filesFileContents = fs.readFileSync(FILES_FILE).toString();
-        var filesFileEntries = filesFileContents.trim().split(/\s+/);
-        expect(filesFileEntries).to.have.members(existingFiles);
+      it('initializes a ball with all non-ignored files and directories moved to `files` subdirectory', function () {
+        expect(fs.readdirSync(filesDir)).to.have.members(existingFiles.concat(existingDirs));
+      });
+    });
+
+
+    describe('when called in a directory containing `files` subdirectory', function () {
+      beforeEach(function () {
+        fs.mkdirSync(filesDir);
+      });
+
+      it('initializes a ball with `files` subdirectory in `files` subdirectory', function () {
+        expect(baller.init).to.not.throw(Error);
+        expect(fs.statSync(path.join(filesDir, 'files')).isDirectory()).to.be.true;
+      });
+    });
+
+
+    describe('when called in a directory containing `files` file', function () {
+      var fileContent = 'hello';
+
+      beforeEach(function () {
+        fs.writeFileSync(filesDir, fileContent);
+      });
+
+      it('initializes a ball with `files` file with correct contents in `files` subdirectory', function () {
+        expect(baller.init).to.not.throw(Error);
+        expect(fs.statSync(path.join(filesDir, 'files')).isFile()).to.be.true;
+        expect(fs.readFileSync(path.join(filesDir, 'files')).toString()).to.equal(fileContent);
       });
     });
   });
@@ -354,6 +379,34 @@ describe('Baller', function () {
       });
     });
 
+    describe('when called in a directory that is a non-empty ball with a `files` file', function () {
+      var existingFiles = [
+        'one',
+        'two',
+        'three',
+        FILES_DIR
+      ];
+
+      beforeEach(function () {
+        fs.mkdir(name);
+        _.each(existingFiles, function (existingFile) {
+          fs.writeFileSync(path.join(name, existingFile));
+        });
+        var cwd = path.join(process.cwd(), name);
+        sinon.stub(process, 'cwd').returns(cwd);
+        baller.init();
+      });
+
+      afterEach(function () {
+        process.cwd.restore();
+      });
+
+      it('removes all files in directory except original files', function () {
+        baller.destroy();
+        expect(fs.readdirSync('.')).to.have.members(existingFiles);
+      });
+    });
+
 
     describe('when called in a directory that is not a ball', function () {
       var existingFiles = [
@@ -362,7 +415,7 @@ describe('Baller', function () {
         'three',
         README_FILE,
         LICENSE_FILE,
-        FILES_FILE
+        FILES_DIR
       ].concat(BALLER_SCRIPTS);
 
       beforeEach(function () {
