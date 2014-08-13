@@ -10,10 +10,10 @@ if [ -f "${pre}" ]; then
   source "${pre}"
 fi
 
-files="$(cat "${dir}/files")"
-for f in ${files}; do
-  installed_file="${HOME}/${f}"
-  ln -sf "${dir}/${f}" "${installed_file}" && echo "Installed ${installed_file}"
+for f in "${dir}/files/"*; do
+  filename="$(basename "${f}")"
+  installed_file="${HOME}/${filename}"
+  ln -sf "${f}" "${installed_file}" && echo "Installed ${installed_file}"
 done
 
 post="${dir}/post-install"
