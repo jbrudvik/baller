@@ -19,7 +19,7 @@ There are two ways to create a ball: Create from scratch, or create from existin
 
     $ baller create <name>
 
-This will create a new directory with a README and all of the Baller scripts. The Baller scripts will have no effect, however, until files are added to the directory and the file(s) names are added to `files`.
+This will create a new directory with a README and all of the Baller scripts. The Baller scripts will have no effect, however, until files are added to the `files` subdirectory.
 
 Alternatively, a ball can be created from an existing directory which will be functional immediately:
 
