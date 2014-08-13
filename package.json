@@ -1,6 +1,6 @@
 {
   "name": "baller",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "author": "Jeremy Brudvik <jeremy@brudvik.me>",
   "description": "Organizes your configuration files",
   "dependencies": {
