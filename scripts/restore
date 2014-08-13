@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 shopt -s nullglob
+shopt -s dotglob
 
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 for f in "${dir}/files/"*; do
   filename="$(basename "${f}")"
@@ -54,5 +54,3 @@ for f in "${dir}/files/"*; do
     mv "${latest_backup_file}" "${installed_file}" && echo "Restored ${installed_file} (from ${latest_backup_file})"
   fi
 done
-
-shopt -u nullglob

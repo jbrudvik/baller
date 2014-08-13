@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+shopt -s nullglob
+shopt -s dotglob
+
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 backup="${dir}/backup"

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 shopt -s nullglob
+shopt -s dotglob
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 for f in "${dir}/files/"*; do
   filename="$(basename "${f}")"
@@ -12,5 +13,3 @@ for f in "${dir}/files/"*; do
     rm "${backup_file}" && echo "Removed ${backup_file}"
   done
 done
-
-shopt -u nullglob
