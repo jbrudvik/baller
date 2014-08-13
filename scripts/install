@@ -13,6 +13,7 @@ fi
 for f in "${dir}/files/"*; do
   filename="$(basename "${f}")"
   installed_file="${HOME}/${filename}"
+
   ln -sf "${f}" "${installed_file}" && echo "Installed ${installed_file}"
 done
 

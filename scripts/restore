@@ -2,19 +2,20 @@
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-files="$(cat "${dir}/files")"
-
 shopt -s nullglob
 
-for f in ${files}; do
+
+for f in "${dir}/files/"*; do
+  filename="$(basename "${f}")"
+  installed_file="${HOME}/${filename}"
 
   # Find latest backup
   latest_backup_file=
 
-  for backup_file in "${HOME}/${f}".*.bak; do
+  for backup_file in "${installed_file}".*.bak; do
 
     # Parse backup filename into timestamp and version (if it exists)
-    backup_postfix="${backup_file#${HOME}/${f}.}"
+    backup_postfix="${backup_file#${installed_file}.}"
     backup_id=${backup_postfix%.bak}
     backup_timestamp=${backup_id%.*}
     backup_version=
@@ -23,7 +24,7 @@ for f in ${files}; do
     fi
 
     # Parse latest backup filename into timestamp and version (if it exists)
-    latest_backup_postfix="${latest_backup_file#${HOME}/${f}.}"
+    latest_backup_postfix="${latest_backup_file#${installed_file}.}"
     latest_backup_id=${latest_backup_postfix%.bak}
     latest_backup_timestamp=${latest_backup_id%.*}
     latest_backup_version=
@@ -50,7 +51,7 @@ for f in ${files}; do
 
   # Restore from latest backup (if found)
   if [ -n "${latest_backup_file}" ]; then
-    mv "${latest_backup_file}" "${HOME}/${f}" && echo "Restored ${HOME}/${f} (from ${latest_backup_file})"
+    mv "${latest_backup_file}" "${installed_file}" && echo "Restored ${installed_file} (from ${latest_backup_file})"
   fi
 done
 

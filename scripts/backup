@@ -4,18 +4,19 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 seconds_since_epoch=$(date +%s)
 
-files="$(cat "${dir}/files")"
-for f in ${files}; do
-  if [ -f "${HOME}/${f}" ]; then
+for f in "${dir}/files/"*; do
+  filename="$(basename "${f}")"
+  installed_file="${HOME}/${filename}"
+
+  if [ -f "${installed_file}" ]; then
     # Only back up file if not equivalent to install file
-    if [ "$(stat -f "%Y" "${HOME}/${f}")" != "${dir}/${f}" ]; then
-      backup="${HOME}/${f}.${seconds_since_epoch}.bak"
+    if [ "$(stat -f "%Y" "${installed_file}")" != "${f}" ]; then
+      backup="${installed_file}.${seconds_since_epoch}.bak"
       i=1
       while [ -f "${backup}" ]; do
-        backup="${HOME}/${f}.${seconds_since_epoch}.${i}.bak"
+        backup="${installed_file}.${seconds_since_epoch}.${i}.bak"
         ((i++))
       done
-      installed_file="${HOME}/${f}"
       mv "${installed_file}" "${backup}" && echo "Backed up ${installed_file} (to ${backup})"
     fi
   fi

@@ -2,9 +2,10 @@
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-files="$(cat "${dir}/files")"
-for f in ${files}; do
-  installed_file="${HOME}/${f}"
+for f in "${dir}/files/"*; do
+  filename="$(basename "${f}")"
+  installed_file="${HOME}/${filename}"
+
   if [ -e "${installed_file}" ] || [ -h "${installed_file}" ]; then
     rm "${installed_file}" && echo "Removed ${installed_file}"
   fi
