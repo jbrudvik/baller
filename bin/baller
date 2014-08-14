@@ -27,7 +27,7 @@ program
 
 program
   .command('destroy')
-  .description('Remove all Baller scripts from current ball')
+  .description('Remove all Baller-introduced files and structure from current ball')
   .action(actionWrapper(baller.destroy));
 
 program
