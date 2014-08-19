@@ -452,7 +452,7 @@ describe('Baller', function () {
 function getVisibleFiles(dir) {
   return _.chain(fs.readdirSync(dir))
     .filter(function (file) {
-      // Must be file
+      // Must be a file
       return fs.statSync(path.join(dir, file)).isFile();
     })
     .filter(function (file) {
