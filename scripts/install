@@ -4,11 +4,12 @@ shopt -s nullglob
 shopt -s dotglob
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+hooks="${dir}/hooks"
 
 backup="${dir}/backup"
 source "${backup}"
 
-pre="${dir}/pre-install"
+pre="${hooks}/pre-install"
 if [ -f "${pre}" ]; then
   source "${pre}"
 fi
@@ -20,7 +21,7 @@ for f in "${dir}/files/"*; do
   ln -sf "${f}" "${installed_file}" && echo "Installed ${installed_file}"
 done
 
-post="${dir}/post-install"
+post="${hooks}/post-install"
 if [ -f "${post}" ]; then
   source "${post}"
 fi

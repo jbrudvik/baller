@@ -24,3 +24,12 @@ Will restore to previous file backups if present.
     $ {{name}}/remove-backups
 
 Remove all backup files. Cannot be undone!
+
+## Hooks
+
+The `{{name}}/hooks` subdirectory contains scripts that will be run immediately before or after corresponding ball scripts. Currently supported hooks:
+
+- `pre-install`
+- `post-install`
+- `pre-update`
+- `post-update`

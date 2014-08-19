@@ -18,18 +18,10 @@ var VERSION_FILE = 'version';
 var README_FILE = 'README.md';
 var LICENSE_FILE = 'LICENSE';
 var FILES_DIR = 'files';
-var BALLER_SCRIPTS = [
-  'backup',
-  'install',
-  'uninstall',
-  'update',
-  'pre-install',
-  'post-install',
-  'remove-backups',
-  'restore',
-  'pre-update',
-  'post-update'
-];
+var SCRIPTS_DIR = 'scripts';
+var HOOKS_DIR = 'hooks';
+var SCRIPTS = getVisibleFiles(SCRIPTS_DIR);
+var HOOKS = getVisibleFiles(path.join(SCRIPTS_DIR, HOOKS_DIR));
 
 
 describe('Baller', function () {
@@ -121,9 +113,8 @@ describe('Baller', function () {
       });
 
       it('which includes all Baller scripts', function () {
-        _.each(BALLER_SCRIPTS, function (script) {
-          expect(fs.existsSync(path.join(name, script))).to.be.true;
-        });
+        expect(fs.readdirSync(name)).to.include.members(SCRIPTS);
+        expect(fs.readdirSync(path.join(name, 'hooks'))).to.include.members(HOOKS);
       });
     });
   });
@@ -182,9 +173,8 @@ describe('Baller', function () {
       });
 
       it('which includes all Baller scripts', function () {
-        _.each(BALLER_SCRIPTS, function (script) {
-          expect(fs.existsSync(script)).to.be.true;
-        });
+        expect(fs.readdirSync('.')).to.include.members(SCRIPTS);
+        expect(fs.readdirSync(path.join('.', 'hooks'))).to.include.members(HOOKS);
       });
     });
 
@@ -244,17 +234,23 @@ describe('Baller', function () {
         'two',
         'three',
         FILES_DIR
-      ];
+      ].concat(SCRIPTS);
 
       var ignoredFiles = [
-        README_FILE,
         LICENSE_FILE
-      ].concat(BALLER_SCRIPTS);
+      ];
+
+      var ignoredDirs = [
+        '.git'
+      ];
 
       beforeEach(function () {
         var existingFiles = nonIgnoredFiles.concat(ignoredFiles);
         _.each(existingFiles, function (existingFile) {
           fs.writeFileSync(existingFile);
+        });
+        _.each(ignoredDirs, function (ignoredDir) {
+          fs.mkdir(ignoredDir);
         });
         baller.init();
       });
@@ -416,7 +412,7 @@ describe('Baller', function () {
         README_FILE,
         LICENSE_FILE,
         FILES_DIR
-      ].concat(BALLER_SCRIPTS);
+      ].concat(SCRIPTS);
 
       beforeEach(function () {
         fs.mkdir(name);
@@ -447,6 +443,24 @@ describe('Baller', function () {
   });
 });
 
+
+/*
+ * Return a list of file names containing visible files in a directory.
+ *
+ * Synchronous. Does not include non-files (e.g., directories).
+ */
+function getVisibleFiles(dir) {
+  return _.chain(fs.readdirSync(dir))
+    .filter(function (file) {
+      // Must be file
+      return fs.statSync(path.join(dir, file)).isFile();
+    })
+    .filter(function (file) {
+      // Must be visible (not start with .)
+      return !/^\./.test(file);
+    })
+    .value();
+}
 
 /*
  * Return an object, potentially nested, representing the contents of the
