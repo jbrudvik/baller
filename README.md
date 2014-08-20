@@ -30,14 +30,14 @@ This adds a README and the Baller scripts to the current directory and also adds
 
 ## Update
 
-To update the current ball to use current versions of Baller scripts:
+Update the current ball to use current versions of Baller scripts:
 
     $ baller update
 
 
 ## Destroy
 
-To take an existing ball and remove all Baller-introduced files:
+Remove all Baller-introduced files and structure from current ball:
 
     $ baller destroy
 
