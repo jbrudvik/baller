@@ -44,7 +44,7 @@ Remove all Baller-introduced files and structure from current ball:
 
 ## Deploy
 
-To share your ball with others:
+Deploy your ball to GitHub:
 
     $ baller deploy
 
