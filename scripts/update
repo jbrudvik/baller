@@ -8,9 +8,15 @@ if [ -f "${pre}" ]; then
   source "${pre}"
 fi
 
-git -C "$(dirname "$0")" pull
+pushd "${dir}" > /dev/null
+rev_before_pull=$(git rev-parse HEAD)
+git pull
+rev_after_pull=$(git rev-parse HEAD)
+popd > /dev/null
 
-post="${hooks}/post-update"
-if [ -f "${post}" ]; then
-  source "${post}"
+if [ "${rev_before_pull}" != "${rev_after_pull}" ]; then
+  post="${hooks}/post-update"
+  if [ -f "${post}" ]; then
+    source "${post}"
+  fi
 fi
