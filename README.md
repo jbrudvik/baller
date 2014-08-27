@@ -2,7 +2,18 @@
 
 Baller organizes your configuration files.
 
-Use Baller to create a "ball" for a configuration files. Once you've put your configuration files in a ball, it's easy to install and update your configuration files on all of your different computers. Share with others, too.
+Use Baller to create a "ball" for your configuration files. Once you've created a ball for your configuration files, it's easy to install and update them across multiple computers.
+
+Balls contain:
+
+- A `files` subdirectory containing configuration files
+- Scripts to manage the configuration files: `install` to home directory, `update` to the latest changes, `uninstall` from home directory
+- A `hooks` directory of optional scripts that will be called before/after corresponding ball scripts (e.g., `pre-install`, `post-update`)
+- A `README.md` file documenting how to use the configuration files
+
+For a more detailed example, [see an existing ball](https://github.com/jbrudvik/vim-config).
+
+Balls require no dependencies other than Bash and Git.
 
 [![Build status](https://drone.io/github.com/jbrudvik/baller/status.png)](https://drone.io/github.com/jbrudvik/baller/latest)
 [![NPM version](http://img.shields.io/npm/v/baller.svg)](https://www.npmjs.org/package/baller)
