@@ -5,6 +5,11 @@ shopt -s dotglob
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+pre="${dir}/pre-uninstall"
+if [ -f "${pre}" ]; then
+  source "${pre}"
+fi
+
 for f in "${dir}/files/"*; do
   filename="$(basename "${f}")"
   installed_file="${HOME}/${filename}"
@@ -13,6 +18,11 @@ for f in "${dir}/files/"*; do
     rm "${installed_file}" && echo "Removed ${installed_file}"
   fi
 done
+
+post="${dir}/post-uninstall"
+if [ -f "${post}" ]; then
+  source "${post}"
+fi
 
 restore="${dir}/restore"
 source "${restore}"
