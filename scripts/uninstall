@@ -4,8 +4,9 @@ shopt -s nullglob
 shopt -s dotglob
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+hooks="${dir}/hooks"
 
-pre="${dir}/pre-uninstall"
+pre="${hooks}/pre-uninstall"
 if [ -f "${pre}" ]; then
   source "${pre}"
 fi
@@ -19,7 +20,7 @@ for f in "${dir}/files/"*; do
   fi
 done
 
-post="${dir}/post-uninstall"
+post="${hooks}/post-uninstall"
 if [ -f "${post}" ]; then
   source "${post}"
 fi
