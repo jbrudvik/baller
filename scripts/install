@@ -8,8 +8,7 @@ dir="$(cd "$(dirname "${self}")" && pwd)"
 script="$(basename "${self}")"
 hooks="${dir}/hooks"
 
-backup="${dir}/backup"
-source "${backup}"
+source "${dir}/backup"
 
 pre="${hooks}/pre-${script}"
 if [ -f "${pre}" ]; then

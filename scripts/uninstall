@@ -27,5 +27,4 @@ if [ -f "${post}" ]; then
   source "${post}"
 fi
 
-restore="${dir}/restore"
-source "${restore}"
+source "${dir}/restore"
