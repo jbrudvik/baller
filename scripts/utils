@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function source_hook {
+  prefix="${1}"
+  script="${2}"
+  dir="${3}"
+  hook="${dir}/hooks/${prefix}-${script}"
+  if [ -f "${hook}" ]; then
+      source "${hook}"
+  fi
+}

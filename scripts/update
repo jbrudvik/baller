@@ -3,12 +3,9 @@
 self="${BASH_SOURCE[0]}"
 dir="$(cd "$(dirname "${self}")" && pwd)"
 script="$(basename "${self}")"
-hooks="${dir}/hooks"
+source "${dir}/utils"
 
-pre="${hooks}/pre-${script}"
-if [ -f "${pre}" ]; then
-  source "${pre}"
-fi
+source_hook pre "${script}" "${dir}"
 
 pushd "${dir}" > /dev/null
 rev_before_pull=$(git rev-parse HEAD)
@@ -17,8 +14,5 @@ rev_after_pull=$(git rev-parse HEAD)
 popd > /dev/null
 
 if [ "${rev_before_pull}" != "${rev_after_pull}" ]; then
-  post="${hooks}/post-${script}"
-  if [ -f "${post}" ]; then
-    source "${post}"
-  fi
+  source_hook post "${script}" "${dir}"
 fi

@@ -6,14 +6,11 @@ shopt -s dotglob
 self="${BASH_SOURCE[0]}"
 dir="$(cd "$(dirname "${self}")" && pwd)"
 script="$(basename "${self}")"
-hooks="${dir}/hooks"
+source "${dir}/utils"
 
 source "${dir}/backup"
 
-pre="${hooks}/pre-${script}"
-if [ -f "${pre}" ]; then
-  source "${pre}"
-fi
+source_hook pre "${script}" "${dir}"
 
 for f in "${dir}/files/"*; do
   filename="$(basename "${f}")"
@@ -22,7 +19,4 @@ for f in "${dir}/files/"*; do
   ln -sf "${f}" "${installed_file}" && echo "Installed ${installed_file}"
 done
 
-post="${hooks}/post-${script}"
-if [ -f "${post}" ]; then
-  source "${post}"
-fi
+source_hook post "${script}" "${dir}"
