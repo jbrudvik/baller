@@ -8,9 +8,11 @@ source "${dir}/utils"
 source_hook pre "${script}" "${dir}"
 
 pushd "${dir}" > /dev/null
-rev_before_pull=$(git rev-parse HEAD)
-git pull
-rev_after_pull=$(git rev-parse HEAD)
+if [ -d .git ]; then
+  rev_before_pull=$(git rev-parse HEAD)
+  git pull
+  rev_after_pull=$(git rev-parse HEAD)
+fi
 popd > /dev/null
 
 if [ "${rev_before_pull}" != "${rev_after_pull}" ]; then
