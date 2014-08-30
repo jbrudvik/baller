@@ -25,11 +25,6 @@ program
   .description('Remove all Baller-introduced files and structure from current ball')
   .action(actionWrapper(baller.destroy));
 
-program
-  .command('*')
-  .description('Show help')
-  .action(program.outputHelp);
-
 
 program.parse(process.argv);
 
