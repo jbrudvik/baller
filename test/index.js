@@ -53,16 +53,8 @@ describe('Baller', function () {
       expect(baller.init).to.exist;
     });
 
-    it('includes update', function () {
-      expect(baller.update).to.exist;
-    });
-
     it('includes destroy', function () {
       expect(baller.destroy).to.exist;
-    });
-
-    it('includes deploy', function () {
-      expect(baller.deploy).to.exist;
     });
   });
 

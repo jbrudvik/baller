@@ -21,19 +21,9 @@ program
   .action(actionWrapper(baller.init));
 
 program
-  .command('update')
-  .description('Update the current ball to use current versions of Baller scripts')
-  .action(actionWrapper(baller.update));
-
-program
   .command('destroy')
   .description('Remove all Baller-introduced files and structure from current ball')
   .action(actionWrapper(baller.destroy));
-
-program
-  .command('deploy')
-  .description('Deploy the current ball to GitHub (or update existing deploy)')
-  .action(actionWrapper(baller.deploy));
 
 program
   .command('*')
