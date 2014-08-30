@@ -39,27 +39,11 @@ Alternatively, a ball can be created from an existing directory which will be fu
 This adds a README and the Baller scripts to the current directory and also adds an entry to each of the initial files to `files`.
 
 
-## Update
-
-Update the current ball to use current versions of Baller scripts:
-
-    $ baller update
-
-
 ## Destroy
 
 Remove all Baller-introduced files and structure from current ball:
 
     $ baller destroy
-
-
-## Deploy
-
-Deploy your ball to GitHub:
-
-    $ baller deploy
-
-This will publicly deploy your current working ball to GitHub at `https://github.com/<username>/<ball>`. If this project does not exist, it will be created. Otherwise, the project will be updated.
 
 
 ## Test
