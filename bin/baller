@@ -2,9 +2,8 @@
 
 var program = require('commander');
 
-var pkg = require('../package.json');
-
 var baller = require('../lib');
+var pkg = require('../package.json');
 
 
 program
