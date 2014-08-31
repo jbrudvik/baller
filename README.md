@@ -9,7 +9,7 @@ Balls contain:
 - A `files` subdirectory containing configuration files
 - Scripts to manage the configuration files: `install` to home directory, `update` to the latest changes, `uninstall` from home directory
 - A `hooks` directory of optional scripts that will be called before/after corresponding ball scripts (e.g., `pre-install`, `post-update`)
-- A `README.md` file documenting how to use the configuration files
+- A `README.md` file documenting how to use the ball
 
 For a more detailed example, [see an existing ball](https://github.com/jbrudvik/vim-config).
 
