@@ -27,11 +27,11 @@ Remove all backup files. Cannot be undone!
 
 ## Hooks
 
-The `{{name}}/hooks` subdirectory contains scripts that will be run immediately before or after corresponding ball scripts. Available hooks:
+The `{{name}}/hooks` subdirectory contains scripts that will be run immediately before (`pre`) or after (`post`) execution of corresponding ball scripts. Available hooks:
 
 - `pre-install`
 - `post-install`
 - `pre-update`
-- `post-update` (called only if there was an update)
+- `post-update` (run only if `update` pulls new changes)
 - `pre-uninstall`
 - `post-uninstall`
