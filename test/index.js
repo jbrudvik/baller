@@ -16,7 +16,6 @@ var pkg = require('../package.json');
 var BALLER_META_DIR = '.baller';
 var VERSION_FILE = 'version';
 var README_FILE = 'README.md';
-var LICENSE_FILE = 'LICENSE';
 var FILES_DIR = 'files';
 var SCRIPTS_DIR = 'scripts';
 var HOOKS_DIR = 'hooks';
@@ -227,19 +226,13 @@ describe('Baller', function () {
         'three',
         FILES_DIR
       ].concat(SCRIPTS);
-
-      var ignoredFiles = [
-        LICENSE_FILE
-      ];
-
       var ignoredDirs = [
         '.git'
       ];
 
       beforeEach(function () {
-        var existingFiles = nonIgnoredFiles.concat(ignoredFiles);
-        _.each(existingFiles, function (existingFile) {
-          fs.writeFileSync(existingFile);
+        _.each(nonIgnoredFiles, function (nonIgnoredFile) {
+          fs.writeFileSync(nonIgnoredFile);
         });
         _.each(ignoredDirs, function (ignoredDir) {
           fs.mkdir(ignoredDir);
@@ -402,7 +395,6 @@ describe('Baller', function () {
         'two',
         'three',
         README_FILE,
-        LICENSE_FILE,
         FILES_DIR
       ].concat(SCRIPTS);
 
