@@ -7,7 +7,8 @@
     "commander": "2.x",
     "handlebars": "2.x",
     "underscore": "1.6.x",
-    "rimraf": "2.x"
+    "rimraf": "2.x",
+    "node-uuid": "1.4.x"
   },
   "devDependencies": {
     "mocha": "1.x",
