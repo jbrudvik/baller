@@ -2,6 +2,9 @@
 
 Baller organizes your configuration files.
 
+[![Build status](https://drone.io/github.com/jbrudvik/baller/status.png)](https://drone.io/github.com/jbrudvik/baller/latest)
+[![NPM version](http://img.shields.io/npm/v/baller.svg)](https://www.npmjs.org/package/baller)
+
 Use Baller to create a "ball" for your configuration files. Once you've created a ball for your configuration files, it's easy to install and update them across multiple computers.
 
 Balls contain:
@@ -14,9 +17,6 @@ Balls contain:
 For a more detailed example, [see an existing ball](https://github.com/jbrudvik/vim-config).
 
 Balls require no dependencies other than Bash and Git.
-
-[![Build status](https://drone.io/github.com/jbrudvik/baller/status.png)](https://drone.io/github.com/jbrudvik/baller/latest)
-[![NPM version](http://img.shields.io/npm/v/baller.svg)](https://www.npmjs.org/package/baller)
 
 
 ## Install
