@@ -19,12 +19,12 @@ For a more detailed example, [see an existing ball](https://github.com/jbrudvik/
 Balls require no dependencies other than Bash and Git.
 
 
-## Install
+## Install Baller
 
     $ npm install -g baller
 
 
-## Create
+## Create a Ball
 
 There are two ways to create a ball: Create from scratch, or create from existing files. To create a new ball in a new directory:
 
@@ -39,14 +39,14 @@ Alternatively, a ball can be created from an existing directory which will be fu
 This adds a README and the Baller scripts to the current directory and also adds an entry to each of the initial files to `files`.
 
 
-## Destroy
+## Destroy a Ball
 
 Remove all Baller-introduced files and structure from current ball:
 
     $ baller destroy
 
 
-## Test
+## Test Baller
 
     $ npm test
 
