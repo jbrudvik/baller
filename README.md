@@ -16,7 +16,7 @@ Balls contain:
 
 For a more detailed example, [see an existing ball](https://github.com/jbrudvik/vim-config).
 
-Balls assume a Bash environment with `git` installed.
+Balls require a Bash environment with `git` installed.
 
 
 ## Install Baller
