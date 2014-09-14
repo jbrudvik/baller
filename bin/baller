@@ -28,22 +28,24 @@ program
 program.parse(process.argv);
 
 
-if (!program.args.length) {
-  program.help();
-}
+// Show help if no action was taken
+program.help();
 
 
 /*
  * Takes a function and returns a new function that, when invoked, calls
- * the given function and logs the value returned to stdout. If any error
- * is thrown by the given function, the new function logs the error messsage
- * to stderr and exits the current process with a non-zero exit code.
+ * the given function and logs the value returned to stdout, and exits.
+ *
+ * If any error is thrown by the given function, the new function logs
+ * the error messsage to stderr and exits the current process with a
+ * non-zero exit code.
  */
 function actionWrapper(f) {
   return function () {
     try {
       var message = f.apply(null, arguments);
       console.log(message);
+      process.exit(0);
     } catch (e) {
       console.error(e.message);
       process.exit(1);
