@@ -3,7 +3,7 @@
 Baller organizes your configuration files.
 
 [![NPM version](http://img.shields.io/npm/v/baller.svg)](https://www.npmjs.org/package/baller)
-[![Build status](https://drone.io/github.com/jbrudvik/baller/status.png)](https://drone.io/github.com/jbrudvik/baller/latest)
+[![Build status](https://img.shields.io/travis/jbrudvik/baller.svg)](https://travis-ci.org/jbrudvik/baller)
 
 Use Baller to create a "ball" for your configuration files. Once you've created a ball for your configuration files, it's easy to install and update them across multiple computers.
 
