@@ -46,14 +46,16 @@ Remove all Baller-introduced files and structure from current ball:
     $ baller destroy
 
 
-## Test Baller
-
-    $ npm test
-
-
 ## Example balls
 
 - [https://github.com/jbrudvik/bash-config](https://github.com/jbrudvik/bash-config)
 - [https://github.com/jbrudvik/vim-config](https://github.com/jbrudvik/vim-config)
 - [https://github.com/jbrudvik/git-config](https://github.com/jbrudvik/git-config)
 - [https://github.com/jbrudvik/jshint-config](https://github.com/jbrudvik/jshint-config)
+
+
+## Development
+
+### Test
+
+    $ npm test
