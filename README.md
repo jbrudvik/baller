@@ -59,3 +59,8 @@ Remove all Baller-introduced files and structure from current ball:
 ### Test
 
     $ npm test
+
+### Deploy
+
+- Bump version in `package.json`
+- `$ npm publish`
