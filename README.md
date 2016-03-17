@@ -1,6 +1,6 @@
 # Baller
 
-Note: This project is no longer maintained.
+**Note: This project is no longer maintained.**
 
 Baller organizes your configuration files.
 
