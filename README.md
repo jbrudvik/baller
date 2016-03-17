@@ -1,5 +1,7 @@
 # Baller
 
+Note: This project is no longer maintained.
+
 Baller organizes your configuration files.
 
 [![Build status](https://img.shields.io/travis/jbrudvik/baller.svg)](https://travis-ci.org/jbrudvik/baller)
